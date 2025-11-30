@@ -1,0 +1,61 @@
+name: "dense_laplace_ones"
+
+sam_model: "SAM2_large"
+
+resume_from_checkpoint_path: null
+
+base_lr: 1.0e-4
+max_epochs: 5
+batch_size: 1
+max_num_objects: 32
+seed: 42
+grad_clip_norm: 0.1
+weight_decay: 0.001
+
+num_points_to_sample: 8
+sample_from_gt_probability: 0.5
+
+multistep_training: true
+sparse_prompts: true
+ones_baseline: true
+
+uncertainty_method: "laplace"
+laplace_checkpoint: null
+variance_network_checkpoint: null
+
+tuning_strategy: "dense_prompt" #"dense_prompt"
+
+tta_transform: "hue"
+tta_samples: 5
+
+laplace_samples: 100
+prompt_perturbations: 5 # NA
+bbox_probability: 0.5 # Use Bounding Boxes
+preturb_prompts: True # Use GT bounding boxes
+
+eval_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+
+# Use Same transforms as SAM 2 used during training on images
+train_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomHorizontalFlip
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]

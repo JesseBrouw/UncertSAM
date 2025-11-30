@@ -1,0 +1,16 @@
+defaults:
+  - _self_
+  - checkpoint_mapping: local
+  - experiment: "stage_1/SAM2_5_points.yaml"
+  - model: "sam2/sam2_hiera_t.yaml"
+
+hydra:
+  run:
+    dir: ${hydra:runtime.cwd}/logs/hydra_logs/${experiment.name}/${now:%Y-%m-%d_%H-%M}
+
+output_dir: ${hydra:runtime.cwd}/logs/hydra_logs/${experiment.name}/${now:%Y-%m-%d_%H-%M}
+root_dir: ${hydra:runtime.cwd}
+data_dir: ${hydra:runtime.cwd}/data
+
+num_workers: 0
+pin_memory: False

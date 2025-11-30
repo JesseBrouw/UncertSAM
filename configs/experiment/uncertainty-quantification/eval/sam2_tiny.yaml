@@ -1,0 +1,38 @@
+name: "eval_sam2_tiny"
+sam_model: "SAM2.1_tiny"
+
+uncertainty_method: "prompt_perturbation" # "variance_network" "laplace" "TTA" "prompt_perturbations"
+prompt_refinement_method: null
+refine_with_sparse_prompts: True
+
+variance_network_checkpoint: null
+laplace_checkpoint: null
+
+uncertain_prompt_encoder_path: null
+
+seed: 7
+
+target_datasets:
+  - COIFT
+
+split: "val"
+
+tta_transform: "hue"
+tta_samples: 5
+
+laplace_samples: 0
+prompt_perturbations: 5
+bbox_probability: 1.0
+preturb_prompts: true
+
+eval_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]

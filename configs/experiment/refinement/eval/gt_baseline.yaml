@@ -1,0 +1,45 @@
+name: "gt_baseline"
+sam_model: "SAM2_large"
+
+uncertainty_method: "entropy"
+prompt_refinement_method: "gt_baseline"
+refine_with_sparse_prompts: True
+
+laplace_checkpoint: null
+variance_network_checkpoint: null
+uncertain_prompt_encoder_path: null
+
+seed: 42
+
+target_datasets:
+  - COIFT
+  - BIG
+  - ISTD
+  - COD10K-v3
+  - MSD_Spleen
+  - SBU-shadow
+  - Flare7K
+  - Flare7K-merged
+  - Trans10K
+
+split: "test"
+
+tta_transform: "hue"
+tta_samples: 5
+
+laplace_samples: 500
+prompt_perturbations: 5 # NA
+bbox_probability: 1.0 # Use Bounding Boxes
+preturb_prompts: False # Use GT bounding boxes
+
+eval_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]

@@ -1,0 +1,50 @@
+name: "laplace"
+sam_model: "SAM2_large"
+
+uncertainty_method: "laplace"
+prompt_refinement_method: null
+refine_with_sparse_prompts: True
+
+ones_baseline: False
+
+laplace_checkpoint: null
+variance_network_checkpoint: null
+
+uncertainty_measure: "pred_avg_entropy"
+
+uncertain_prompt_encoder_path: null
+uncertain_mask_decoder_path: null
+
+seed: 42
+
+target_datasets:
+  - COIFT
+  - BIG
+  - ISTD
+  - COD10K-v3
+  - MSD_Spleen
+  - SBU-shadow
+  - Flare7K
+  - Trans10K
+
+split: "test"
+
+tta_transform: "hue"
+tta_samples: 5
+
+laplace_samples: 1000
+prompt_perturbations: 5
+bbox_probability: 1.0
+preturb_prompts: False
+
+eval_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]

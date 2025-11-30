@@ -1,0 +1,76 @@
+name: "TTA_hue"
+sam_model: "SAM2_large"
+
+uncertainty_method: "TTA"
+uncertainty_measure: "pred_avg_entropy"
+
+ones_baseline: False
+
+prompt_refinement_method: null #"gt_baseline" # "sam_logit" "naive_refinement" "dense_refinement" "naive_refinement"
+refine_with_sparse_prompts: True
+
+laplace_checkpoint: null
+variance_network_checkpoint: null
+
+uncertain_prompt_encoder_path: null
+uncertain_mask_decoder_path: null
+seed: 42
+
+target_datasets:
+  - COIFT
+  - BIG
+  - ISTD
+  - COD10K-v3
+  - MSD_Spleen
+  - SBU-shadow
+  - Flare7K
+  - Trans10K
+
+split: "test"
+
+tta_transform: "hue"
+tta_samples: 10
+
+laplace_samples: 500
+prompt_perturbations: 5 # NA
+bbox_probability: 1.0 # Use Bounding Boxes
+preturb_prompts: False # Use GT bounding boxes
+
+eval_transforms:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+
+in_domain_tta_transform:
+  - _target_: src.uncertsam2.data.transforms.ComposeAPI
+    transforms:
+      - _target_: src.uncertsam2.data.transforms.RandomResizeAPI
+        sizes: 1024
+        square: true
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ColorJitter
+        consistent_transform: True
+        brightness: 0.1
+        contrast: 0.03
+        saturation: 0.03
+        hue: null
+      - _target_: src.uncertsam2.data.transforms.RandomGrayscale
+        p: 0.05
+        consistent_transform: True
+      - _target_: src.uncertsam2.data.transforms.ColorJitter
+        consistent_transform: False
+        brightness: 0.1
+        contrast: 0.05
+        saturation: 0.05
+        hue: null
+      - _target_: src.uncertsam2.data.transforms.ToTensorAPI
+      - _target_: src.uncertsam2.data.transforms.NormalizeAPI
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
