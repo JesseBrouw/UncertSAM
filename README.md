@@ -80,6 +80,7 @@ Found this work useful? Give it a shout-out:
 
 - `Code:` This repository is licensed under the AGPL-3.0.
 - `UncertSAM Benchmark:` The benchmark aggregates multiple datasets (BIG, COD10K, etc.), each with its own license. Please refer to the HuggingFace Dataset Card, or the appendix in the paper, for the specific terms of use for each subset.
+- Files derived from SAM 2 retain their original license headers and are governed by the SAM 2 license where applicable.
 
 ---
 
