@@ -66,11 +66,11 @@ In addition, **Dense Embedding Fusion** leverages the uncertainty maps during re
 Found this work useful? Give it a shout-out:
 
 ```bibtex
-@inproceedings{brouwers2025towards,
-    title     = {Towards Integrating Uncertainty for Domain-Agnostic Segmentation},
-    author    = {Brouwers, Jesse and Xing, Xiaoyan and Timans, Alexander},
-    booktitle = {NeurIPS 2025 Workshop on Frontiers in Probabilistic Inference},
-    year      = {2025}
+@article{brouwers2025towards,
+  title={Towards Integrating Uncertainty for Domain-Agnostic Segmentation},
+  author={Brouwers, Jesse and Xing, Xiaoyan and Timans, Alexander},
+  journal={arXiv preprint arXiv:2512.23427},
+  year={2025}
 }
 ```
 
